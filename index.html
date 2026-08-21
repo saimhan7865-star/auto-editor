@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto-Editor | CapCut Clone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-zinc-900 text-white h-screen flex flex-col overflow-hidden font-sans select-none">
+
+  <!-- Top Navbar -->
+  <header class="h-12 border-b border-zinc-800 flex items-center justify-between px-4 bg-zinc-950">
+    <h1 class="font-bold text-lg text-blue-500 flex items-center gap-2">
+      <i data-lucide="scissors" class="w-5 h-5"></i> Auto-Editor
+    </h1>
+    <button id="export-btn" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded text-sm font-medium transition">
+      <i data-lucide="download" class="w-4 h-4"></i> Export
+    </button>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="flex-1 flex overflow-hidden">
+    <!-- Left Sidebar -->
+    <aside class="w-64 border-r border-zinc-800 bg-zinc-950 p-4 flex flex-col gap-4">
+      <div class="font-semibold text-xs text-zinc-400 uppercase tracking-wider">Media & Tools</div>
+      
+      <label class="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-zinc-700 hover:border-blue-500 p-4 rounded-lg text-sm text-zinc-300 transition cursor-pointer bg-zinc-900/50">
+        <i data-lucide="plus" class="w-5 h-5 text-zinc-400"></i>
+        <span>Upload Video</span>
+        <input type="file" id="video-upload" accept="video/*" class="hidden" />
+      </label>
+
+      <div class="grid grid-cols-2 gap-2 border-t border-zinc-800 pt-4">
+        <button id="add-text-btn" class="flex items-center justify-center gap-2 p-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded text-xs text-zinc-300 transition">
+          <i data-lucide="type" class="w-4 h-4"></i> Add Text
+        </button>
+        <button id="reset-filters-btn" class="flex items-center justify-center gap-2 p-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded text-xs text-zinc-300 transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+        </button>
+      </div>
+    </aside>
+
+    <!-- Center Workspace -->
+    <main class="flex-1 bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      <div id="video-container" class="w-[640px] h-[360px] bg-zinc-900 border border-zinc-800 rounded flex items-center justify-center relative shadow-2xl overflow-hidden">
+        <video id="main-video" class="w-full h-full object-contain hidden"></video>
+        
+        <div id="overlay-text" class="absolute cursor-move font-bold text-white text-2xl hidden drop-shadow-md select-none px-2 py-1 rounded border border-transparent hover:border-blue-500">
+          Sample Text
+        </div>
+
+        <p id="placeholder-text" class="text-zinc-600 text-sm">No Video Uploaded</p>
+      </div>
+
+      <div class="mt-4 flex items-center gap-4">
+        <button id="play-btn" class="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition shadow-lg">
+          <i data-lucide="play" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="w-72 border-l border-zinc-800 bg-zinc-950 p-4 flex flex-col gap-4">
+      <div class="font-semibold text-xs text-zinc-400 uppercase tracking-wider">Properties</div>
+      
+      <div class="space-y-3 border-b border-zinc-800 pb-4">
+        <label class="text-xs text-zinc-400 font-medium">Video Filters</label>
+        <div class="space-y-2">
+          <div>
+            <div class="flex justify-between text-xs text-zinc-500 mb-1">
+              <span>Brightness</span>
+              <span id="brightness-val">100%</span>
+            </div>
+            <input type="range" id="brightness" min="0" max="200" value="100" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-zinc-500 mb-1">
+              <span>Contrast</span>
+              <span id="contrast-val">100%</span>
+            </div>
+            <input type="range" id="contrast" min="0" max="200" value="100" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-zinc-500 mb-1">
+              <span>Grayscale</span>
+              <span id="grayscale-val">0%</span>
+            </div>
+            <input type="range" id="grayscale" min="0" max="100" value="0" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <div id="text-properties" class="space-y-3">
+        <label class="text-xs text-zinc-400 font-medium">Text Settings</label>
+        <input type="text" id="text-input" placeholder="Type text here..." class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+        
+        <div class="flex items-center gap-2">
+          <input type="color" id="text-color" value="#ffffff" class="w-8 h-8 bg-transparent cursor-pointer rounded">
+          <span class="text-xs text-zinc-400">Color</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Bottom Timeline -->
+  <footer class="h-44 border-t border-zinc-800 bg-zinc-950 flex flex-col">
+    <div class="h-8 border-b border-zinc-800 px-4 flex items-center justify-between text-xs text-zinc-400">
+      <span id="time-display">00:00 / 00:00</span>
+      <span>Timeline Workspace</span>
+    </div>
+    <div class="flex-1 p-3 overflow-x-auto space-y-2 bg-zinc-900/30">
+      <div class="h-10 bg-zinc-900 border border-zinc-800 rounded flex items-center px-3 text-xs text-zinc-400">
+        <i data-lucide="film" class="w-4 h-4 mr-2"></i> Video Track
+      </div>
+      <div id="text-track" class="h-10 bg-zinc-900 border border-zinc-800 rounded flex items-center px-3 text-xs text-zinc-400 hidden">
+        <i data-lucide="type" class="w-4 h-4 mr-2"></i> Text Track
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
