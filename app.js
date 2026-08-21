@@ -69,7 +69,6 @@ mainVideo.addEventListener('timeupdate', function () {
   const duration = formatTime(mainVideo.duration || 0);
   timeDisplay.textContent = `${current} / ${duration}`;
 
-  // Sync Red Playhead on Timeline
   if (mainVideo.duration) {
     const progress = (mainVideo.currentTime / mainVideo.duration) * 100;
     playhead.style.left = `${progress}%`;
