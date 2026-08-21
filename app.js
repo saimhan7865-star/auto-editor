@@ -32,7 +32,7 @@ const videoContainer = document.getElementById('video-container');
 const timelineContainer = document.getElementById('timeline-container');
 const playhead = document.getElementById('playhead');
 
-// 1. Video Upload & Basic Playback
+// 1. Video Upload & Playback
 videoUpload.addEventListener('change', function (e) {
   const file = e.target.files[0];
   if (file) {
